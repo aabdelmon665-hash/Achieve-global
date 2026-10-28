@@ -54,6 +54,13 @@ numbers or street addresses. Unverified legal identifiers are kept in
 `src/config/site.ts` as `null` and appear as `[to be completed]` in the
 legal pages until filled in.
 
+## Brand assets
+
+The official logo (original: `assets/brand/achieve-global-logo-original.png`)
+is used unaltered. `node scripts/build-brand-assets.mjs` regenerates the
+web versions in `public/brand/`, the favicon and app icons in `src/app/`, and
+`public/logo.png`.
+
 ## Documentation
 
 - [Deployment & domain](docs/DEPLOYMENT.md)

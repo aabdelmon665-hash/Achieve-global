@@ -32,13 +32,18 @@
 
 @layer base {
   :root {
-    --header-h: 4.5rem;
+    --header-h: 4.75rem;
+  }
+  @media (min-width: 1280px) {
+    :root {
+      --header-h: 5.75rem;
+    }
   }
 
   html {
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
-    scroll-padding-top: 6rem;
+    scroll-padding-top: 7rem;
   }
 
   @media (prefers-reduced-motion: no-preference) {

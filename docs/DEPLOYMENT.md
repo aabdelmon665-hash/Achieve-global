@@ -26,6 +26,9 @@ PORT=3000 npm start      # put behind Nginx/Caddy for HTTPS
 ```
 
 Set the environment variables in the process manager (systemd, PM2, Docker).
+The reverse proxy must set `X-Real-IP` (and overwrite any client-supplied
+value), otherwise the form rate limit can be bypassed:
+`proxy_set_header X-Real-IP $remote_addr;` in Nginx.
 
 ## 2. Connect the domain
 
@@ -81,6 +84,12 @@ Indexing takes days to weeks; no ranking is guaranteed.
   `npm run check:i18n`).
 - Company facts, emails, legal identifiers: `src/config/site.ts`.
 - Photos: `src/config/media.ts` + files in `public/images/`.
+- Logo: replace `assets/brand/achieve-global-logo-original.png` and run
+  `node scripts/build-brand-assets.mjs` to regenerate the header/footer logo,
+  favicon, app icons and `public/logo.png`. The social image
+  `public/og/achieve-global-og.png` is a separate 1200×630 file.
+- Exports mailbox not ready: set `EXPORTS_MAILBOX_ACTIVE = false` in
+  `src/config/site.ts` (see `docs/EMAIL_SETUP.md`).
 - Product catalogue: `src/content/products.ts`.
 - New page: add a slug in `src/config/routes.ts`, a folder under
   `src/app/[locale]/`, and translations in the dictionaries.

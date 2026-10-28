@@ -1,4 +1,4 @@
-import { siteConfig } from "@/config/site";
+import { EXPORTS_MAILBOX_ACTIVE, siteConfig } from "@/config/site";
 import { absoluteUrl } from "@/lib/paths";
 
 export function JsonLd({ data }: { data: Record<string, unknown> }) {
@@ -35,12 +35,16 @@ export function organizationSchema() {
         email: siteConfig.emails.general,
         availableLanguage: ["English", "Turkish", "Arabic"],
       },
-      {
-        "@type": "ContactPoint",
-        contactType: "sales",
-        email: siteConfig.emails.exports,
-        availableLanguage: ["English", "Turkish", "Arabic"],
-      },
+      ...(EXPORTS_MAILBOX_ACTIVE
+        ? [
+            {
+              "@type": "ContactPoint",
+              contactType: "sales",
+              email: siteConfig.emails.exports,
+              availableLanguage: ["English", "Turkish", "Arabic"],
+            },
+          ]
+        : []),
     ],
     ...(Object.keys(siteConfig.social).length ? { sameAs: Object.values(siteConfig.social) } : {}),
   };

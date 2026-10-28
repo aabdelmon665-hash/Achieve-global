@@ -1,102 +1,148 @@
 # Email configuration
 
 All forms post to `/api/inquiry/`, which validates input on the server and
-sends an email through the provider configured in environment variables.
+sends one notification email per inquiry through the provider configured in
+environment variables.
 
-> **Status:** email delivery has **not** been connected to a live provider.
-> Routing and delivery were tested against a local SMTP test server only.
-> Until the variables below are set in production, the forms show visitors a
-> message asking them to email the company directly (HTTP 503). Nothing is
-> lost silently.
+> **Status (not yet live):** no real email provider is connected. Routing and
+> delivery have been tested only against a local SMTP test server. Until the
+> variables below are set in production, the forms tell visitors to email the
+> company directly (HTTP 503) — no inquiry is silently lost. Do not describe
+> the forms as working until the real-mailbox tests at the end of this guide
+> have passed.
+
+## Mailboxes
+
+| Address | Status | Receives |
+|---|---|---|
+| info@achieveglobal.com.tr | Exists | General, industrial sourcing, business services, partnership, other |
+| exports@achieveglobal.com.tr | **To be created** | Food trading & export inquiries, export quotation requests |
+
+The site currently **displays and routes to exports@**. That address must be
+able to receive mail before launch. If you want to launch first, switch it
+off (one line):
+
+```ts
+// src/config/site.ts
+export const EXPORTS_MAILBOX_ACTIVE = false;
+```
+
+While `false`, exports@ is not shown anywhere (pages, footer, page
+descriptions, structured data) and food/export inquiries are delivered to
+info@. Set it back to `true` and redeploy once exports@ works.
+
+Alternatively, create exports@ as an **alias/forwarder to info@** in your
+mailbox provider — then everything works immediately and you can split the
+inboxes later without touching the site.
 
 ## Routing
 
-| Form / category | Destination variable | Default |
+| Form / category | Destination | Override variable |
 |---|---|---|
-| Contact — General, Business Services, Partnership, Other | `EMAIL_TO_GENERAL` | info@achieveglobal.com.tr |
-| Contact — Industrial Trading & Sourcing | `EMAIL_TO_SOURCING` → `EMAIL_TO_GENERAL` | info@achieveglobal.com.tr |
-| Contact — Food Trading & Export | `EMAIL_TO_EXPORTS` | exports@achieveglobal.com.tr |
-| Industrial inquiry form | `EMAIL_TO_SOURCING` → `EMAIL_TO_GENERAL` | info@achieveglobal.com.tr |
-| Food export quotation form | `EMAIL_TO_EXPORTS` | exports@achieveglobal.com.tr |
-| Business services form | `EMAIL_TO_GENERAL` | info@achieveglobal.com.tr |
+| Contact — General, Partnership, Other | info@ | `EMAIL_TO_GENERAL` |
+| Contact — Industrial Trading & Sourcing; industrial form | info@ | `EMAIL_TO_SOURCING` (falls back to `EMAIL_TO_GENERAL`) |
+| Contact — Business Services; business services form | info@ | `EMAIL_TO_GENERAL` |
+| Contact — Food Trading & Export; food export quotation form | exports@ | `EMAIL_TO_EXPORTS` |
 
-The routing logic lives in `src/lib/email/routing.ts`. Each notification has
-the sender's address as **Reply-To**, so the team can answer directly.
+Defaults come from `src/config/site.ts`; the variables are only needed to
+change a destination without a code change. Logic: `src/lib/email/routing.ts`.
+
+## Sender identity — only one is needed
+
+Every notification is sent **from one fixed sender** (`EMAIL_FROM`) and
+**to** the routed inbox, with the visitor's address as **Reply-To**. Routing
+only changes the recipient, so no other sender has to be authorised, and the
+visitor's address is never used as the sender (that would fail SPF/DMARC).
+
+- **Resend:** verifying the domain `achieveglobal.com.tr` authorises any
+  sender on it. Use `no-reply@achieveglobal.com.tr` (no mailbox required).
+- **SMTP:** the sender must be the mailbox you log in with (or an address
+  that mailbox may "send as"), e.g. `EMAIL_FROM=ACHIEVE GLOBAL Website <info@achieveglobal.com.tr>`
+  with `SMTP_USER=info@achieveglobal.com.tr`.
+  ⚠ Some providers (notably Google Workspace/Gmail) file a message sent from
+  info@ to info@ under *Sent* only, so it may not appear in the inbox. If you
+  use SMTP with Google, create a separate sending mailbox (e.g.
+  website@achieveglobal.com.tr) or use Resend.
 
 ## Option A — Resend (recommended)
 
-1. Create an account at resend.com and add the domain `achieveglobal.com.tr`.
-2. Resend shows DNS records (SPF `TXT` on a `send` subdomain, DKIM `TXT`, and
-   an optional `MX` on the `send` subdomain). **Add them alongside your
-   existing records — do not remove or replace your current MX, SPF or DMARC
-   records** (see "Protect existing email DNS" below).
-3. Wait until the domain shows *Verified*.
-4. Create an API key with "Sending access" only.
-5. Set in production:
+1. Create an account at resend.com → *Domains* → add `achieveglobal.com.tr`.
+2. Add the DNS records Resend shows (by default on a `send.` subdomain plus a
+   `resend._domainkey` DKIM record). These **do not** replace your root MX,
+   SPF or DMARC records — see "Protect existing email DNS" below.
+3. Wait for *Verified*. Create an API key with **Sending access** only.
+4. In the hosting dashboard (Vercel → Project → Settings → Environment
+   Variables → Production), enter yourself — never in chat, code or GitHub:
    ```
    EMAIL_PROVIDER=resend
    EMAIL_FROM=ACHIEVE GLOBAL Website <no-reply@achieveglobal.com.tr>
-   EMAIL_PROVIDER_API_KEY=re_…
+   EMAIL_PROVIDER_API_KEY=<key from Resend>
    ```
+5. Redeploy (variables apply to new deployments).
 
-## Option B — SMTP (existing mailbox provider)
-
-Use your mailbox provider's authenticated SMTP (e.g. Google Workspace,
-Microsoft 365, Yandex, or your hosting company's mail server). Many providers
-require an *app password* rather than the normal login password.
+## Option B — SMTP (your existing mailbox provider)
 
 ```
 EMAIL_PROVIDER=smtp
-EMAIL_FROM=ACHIEVE GLOBAL Website <no-reply@achieveglobal.com.tr>
-SMTP_HOST=smtp.example.com
-SMTP_PORT=587
+EMAIL_FROM=ACHIEVE GLOBAL Website <the SMTP login address>
+SMTP_HOST=smtp.your-provider.com
+SMTP_PORT=587          # or 465 with SMTP_SECURE=true
 SMTP_SECURE=false
-SMTP_USER=no-reply@achieveglobal.com.tr
-SMTP_PASSWORD=…
+SMTP_USER=<mailbox login>
+SMTP_PASSWORD=<app password>
 ```
 
-`EMAIL_FROM` should be an address the SMTP account is allowed to send as.
+Many providers require an app-specific password and/or enabling SMTP for
+the mailbox. Ask your provider for host and port.
 
 ## Protect existing email DNS
 
-Before changing any DNS record, export or screenshot the current zone. If
-`info@` and `exports@` already receive mail:
+Before changing any DNS record, export or screenshot the whole zone. Mail to
+info@ already works, so:
 
-- **Keep** the existing `MX` records for the root domain.
-- **SPF:** a domain may have only **one** SPF `TXT` record on the root. If
-  your sending provider asks you to add SPF on the root, merge the `include:`
-  into the existing record instead of adding a second one.
+- **Keep** the existing root `MX` records.
+- **SPF:** a domain may have only **one** SPF `TXT` record on the root. If a
+  provider asks for SPF on the root, merge its `include:` into the existing
+  record instead of adding a second record.
 - **DKIM:** add the provider's selector record; it does not affect others.
-- **DMARC:** keep the existing `_dmarc` record. If none exists, start with
+- **DMARC:** keep the existing `_dmarc` record. If none exists, you may add
   `v=DMARC1; p=none; rua=mailto:info@achieveglobal.com.tr` and tighten later.
 
-Always check the exact records against your provider's current documentation.
+Check the exact records against your providers' current documentation.
 
 ## Optional acknowledgement email
 
-Set `EMAIL_SEND_ACKNOWLEDGEMENT=true` to send visitors a fixed, translated
-"we received your inquiry" message. It never repeats the visitor's text, so
-the form cannot be abused to relay content to third parties.
+`EMAIL_SEND_ACKNOWLEDGEMENT=true` sends visitors a fixed, translated "we
+received your inquiry" message from `EMAIL_FROM` with `EMAIL_REPLY_TO` as
+Reply-To. It never repeats the visitor's text. Recommended only after the
+basic delivery tests pass.
 
-## Testing delivery
+## Testing real delivery (required before launch)
 
-1. Deploy with the variables set.
-2. Submit each form (industrial, food, business, and contact with each
-   category) using a real mailbox you control as the sender address.
-3. Confirm each notification arrives in the expected inbox (table above),
-   is not in spam, and that "Reply" addresses the sender.
-4. Check the hosting logs for `[inquiry]` messages if anything fails. Logs
-   never include API keys or form contents.
+Use a deployment (a Vercel preview URL is fine) with the variables set, and a
+personal mailbox you control as the "visitor" address.
+
+1. Submit the **industrial** form → arrives at info@.
+2. Submit the **food export** form → arrives at exports@ (or info@ if the switch is off).
+3. Submit the **business services** form → arrives at info@.
+4. Submit the **contact** form once per category: General, Industrial,
+   Business Services, Partnership, Other → info@; Food → exports@.
+5. For each message: not in spam; subject starts with the form name; *Reply*
+   addresses your personal mailbox.
+6. If anything fails, open the hosting logs and search for `[inquiry]`
+   (logs never contain API keys or form contents).
+7. Record the date and result in `docs/TESTING_CHECKLIST.md`.
 
 Local development without a provider: `EMAIL_PROVIDER=console npm run dev`
 prints each email to the terminal.
 
-## Spam protection and limits
+## Spam protection and limits (unchanged)
 
 - Hidden honeypot field; submissions that fill it are silently discarded.
-- Submissions made less than 3 seconds after the page loads are rejected.
-- At most 8 submissions per IP address per 10 minutes, per server instance
-  (`src/lib/rate-limit.ts`). For strict limits across many serverless
-  instances, add a shared store (e.g. Upstash Redis) or WAF rate-limit rules.
-- Cross-site posts are rejected (Origin check); bodies over 32 KB are refused.
-- Messages with more than 4 web links are rejected.
+- Submissions less than 3 seconds after page load are rejected.
+- At most 8 submissions per IP per 10 minutes, per server instance
+  (`src/lib/rate-limit.ts`). The client IP is read from `X-Real-IP` /
+  `X-Forwarded-For`, which Vercel sets itself; on a self-hosted server the
+  reverse proxy must overwrite these headers.
+- Cross-site posts rejected (Origin check); bodies over 32 KB refused;
+  messages with more than 4 web links rejected.

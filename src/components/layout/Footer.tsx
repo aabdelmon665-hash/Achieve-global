@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Locale } from "@/i18n/config";
 import type { Dictionary } from "@/i18n/get-dictionary";
-import { siteConfig } from "@/config/site";
+import { EXPORTS_MAILBOX_ACTIVE, siteConfig } from "@/config/site";
 import { href } from "@/lib/paths";
 import { analyticsAvailable } from "@/lib/analytics";
 import { EmailLink } from "@/components/ui/EmailLink";
@@ -18,7 +18,7 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     <footer className="on-dark bg-navy-950 text-white">
       <div className="container-page grid gap-12 py-16 lg:grid-cols-12 lg:py-20">
         <div className="lg:col-span-4">
-          <Logo tone="light" />
+          <Logo variant="footer" />
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-white/65">{f.tagline}</p>
           <p className="mt-6 text-sm font-medium text-white/85">{dict.common.location}</p>
         </div>
@@ -54,10 +54,12 @@ export function Footer({ locale, dict }: { locale: Locale; dict: Dictionary }) {
               <dt className="text-white/50">{dict.common.generalInquiries}</dt>
               <dd><EmailLink email={siteConfig.emails.general} className="text-white/85 hover:text-white" /></dd>
             </div>
-            <div>
-              <dt className="text-white/50">{dict.common.exportsInquiries}</dt>
-              <dd><EmailLink email={siteConfig.emails.exports} className="text-white/85 hover:text-white" /></dd>
-            </div>
+            {EXPORTS_MAILBOX_ACTIVE && (
+              <div>
+                <dt className="text-white/50">{dict.common.exportsInquiries}</dt>
+                <dd><EmailLink email={siteConfig.emails.exports} className="text-white/85 hover:text-white" /></dd>
+              </div>
+            )}
             <div>
               <dt className="text-white/50">{dict.common.officialWebsite}</dt>
               <dd>

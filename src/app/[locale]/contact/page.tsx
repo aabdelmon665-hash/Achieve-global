@@ -3,7 +3,8 @@ import { getDictionary } from "@/i18n/get-dictionary";
 import { resolveLocale } from "@/lib/locale-params";
 import { pageMetadata } from "@/lib/seo";
 import { crumbsFor } from "@/lib/crumbs";
-import { siteConfig } from "@/config/site";
+import { EXPORTS_MAILBOX_ACTIVE, siteConfig } from "@/config/site";
+import { fill } from "@/lib/paths";
 import { PageHero } from "@/components/sections/PageHero";
 import { InquirySection } from "@/components/forms/InquirySection";
 import { EmailLink } from "@/components/ui/EmailLink";
@@ -14,7 +15,8 @@ type Props = PageProps<"/[locale]/contact">;
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const locale = await resolveLocale(params);
   const d = getDictionary(locale);
-  return pageMetadata({ locale, route: "contact", title: d.contact.meta.title, description: d.contact.meta.description });
+  const emails = [...new Set(Object.values(siteConfig.emails))].join(" · ");
+  return pageMetadata({ locale, route: "contact", title: d.contact.meta.title, description: fill(d.contact.meta.description, { emails }) });
 }
 
 export default async function ContactPage({ params }: Props) {
@@ -25,7 +27,7 @@ export default async function ContactPage({ params }: Props) {
   const channels = [
     { icon: "mail" as const, title: dict.common.generalInquiries, text: c.generalText, email: siteConfig.emails.general },
     { icon: "mail" as const, title: dict.common.exportsInquiries, text: c.exportsText, email: siteConfig.emails.exports },
-  ];
+  ].filter((ch, i) => i === 0 || EXPORTS_MAILBOX_ACTIVE);
 
   return (
     <>
@@ -42,7 +44,7 @@ export default async function ContactPage({ params }: Props) {
           <h2 id="channels-title" className="text-2xl font-semibold tracking-tight">{c.channelsTitle}</h2>
           <ul className="mt-8 grid gap-6 md:grid-cols-3">
             {channels.map((ch) => (
-              <li key={ch.email} className="flex flex-col border border-line p-7">
+              <li key={ch.title} className="flex flex-col border border-line p-7">
                 <Icon name={ch.icon} className="h-6 w-6 text-gold-ink" />
                 <h3 className="mt-5 text-base font-semibold">{ch.title}</h3>
                 <p className="mt-2 flex-1 text-sm leading-relaxed text-ink-muted">{ch.text}</p>

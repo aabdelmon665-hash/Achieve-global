@@ -351,7 +351,7 @@ const tr: Dictionary = {
     meta: {
       title: "İletişim — ACHIEVE GLOBAL, İstanbul",
       description:
-        "Endüstriyel tedarik, gıda ihracatı, iş hizmetleri ve iş birliği talepleri için İstanbul'daki ACHIEVE GLOBAL ile iletişime geçin: info@achieveglobal.com.tr veya exports@achieveglobal.com.tr.",
+        "Endüstriyel tedarik, gıda ihracatı, iş hizmetleri ve iş birliği talepleri için İstanbul'daki ACHIEVE GLOBAL ile iletişime geçin: {{emails}}.",
     },
     hero: {
       eyebrow: "İletişim",

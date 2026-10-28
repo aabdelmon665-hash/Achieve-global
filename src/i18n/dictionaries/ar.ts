@@ -350,7 +350,7 @@ const ar: Dictionary = {
     meta: {
       title: "اتصل بـ ACHIEVE GLOBAL — إسطنبول، تركيا",
       description:
-        "تواصل مع ACHIEVE GLOBAL في إسطنبول بشأن التوريد الصناعي وتصدير الأغذية وخدمات الأعمال وفرص الشراكة: info@achieveglobal.com.tr أو exports@achieveglobal.com.tr.",
+        "تواصل مع ACHIEVE GLOBAL في إسطنبول بشأن التوريد الصناعي وتصدير الأغذية وخدمات الأعمال وفرص الشراكة: {{emails}}.",
     },
     hero: {
       eyebrow: "اتصل بنا",

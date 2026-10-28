@@ -349,7 +349,7 @@ const en = {
     meta: {
       title: "Contact ACHIEVE GLOBAL — Istanbul, Türkiye",
       description:
-        "Contact ACHIEVE GLOBAL in Istanbul for industrial sourcing, food export, business services and partnership inquiries. Email info@achieveglobal.com.tr or exports@achieveglobal.com.tr.",
+        "Contact ACHIEVE GLOBAL in Istanbul for industrial sourcing, food export, business services and partnership inquiries. Email {{emails}}.",
     },
     hero: {
       eyebrow: "Contact",

@@ -20,7 +20,7 @@ export function Header({ locale, dict }: { locale: Locale; dict: Dictionary }) {
     <header className="sticky top-0 z-50 border-b border-line bg-white">
       <div className="container-page flex h-[var(--header-h)] items-center justify-between gap-6">
         <Link href={href(locale, "home")} aria-label={`ACHIEVE GLOBAL — ${n.home}`} className="shrink-0">
-          <Logo />
+          <Logo priority />
         </Link>
         <HeaderNav
           locale={locale}
