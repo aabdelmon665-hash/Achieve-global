@@ -41,7 +41,22 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   images: {
-    formats: ["image/avif", "image/webp"],
+    // Images are pre-sized at build time (scripts/build-brand-assets.mjs), so
+    // no runtime optimizer is needed — Cloudflare's would require Images billing.
+    unoptimized: true,
+  },
+  async redirects() {
+    return [
+      // Every page lives under a language prefix; send the bare domain to English.
+      { source: "/", destination: "/en/", permanent: true },
+      // Paths without a language prefix (and that are not files, API or Next.js
+      // internals) go to their English equivalent, ending on the localized 404.
+      {
+        source: "/:path((?!en(?:/|$)|tr(?:/|$)|ar(?:/|$)|api(?:/|$)|_next(?:/|$)|cdn-cgi(?:/|$))[^.]*)",
+        destination: "/en/:path",
+        permanent: false,
+      },
+    ];
   },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];

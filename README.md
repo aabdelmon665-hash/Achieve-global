@@ -23,6 +23,8 @@ npm run dev        # http://localhost:3000 → redirects to /en/
 | `npm run lint` | ESLint |
 | `npm run typecheck` | TypeScript (generates route types first) |
 | `npm run check:i18n` | Confirms TR and AR translations match EN |
+| `npm run cf:preview` | Build for Cloudflare Workers and run it locally |
+| `npm run cf:deploy` | Build and deploy to Cloudflare from your computer (needs `wrangler login`) |
 
 ## Pages (each under `/en/`, `/tr/`, `/ar/`)
 

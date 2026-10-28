@@ -1,0 +1,16 @@
+{
+  // Cloudflare Workers configuration (OpenNext adapter for Next.js).
+  // The Worker name must match the project name in the Cloudflare dashboard.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "achieve-global",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  // Keep variables set in the Cloudflare dashboard when deploying from Git.
+  "keep_vars": true,
+  "observability": { "enabled": true }
+}

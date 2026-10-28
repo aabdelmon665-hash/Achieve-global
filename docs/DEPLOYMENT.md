@@ -4,10 +4,65 @@ The site is a standard Next.js 16 application. Pages are pre-rendered at
 build time; only `/api/inquiry/` runs on demand. It needs a Node.js host:
 it cannot be deployed as a purely static export.
 
-**Recommended:** Vercel (zero configuration). Netlify, Render, Railway, or any
-Node 20+ server (`npm run build && npm start`) also work.
+Supported targets:
 
-## 1. Deploy (Vercel)
+- **Cloudflare Workers** (free plan) via the OpenNext adapter — configured in
+  this repository (`wrangler.jsonc`, `open-next.config.ts`). See below.
+- **Vercel** (zero configuration; a commercial site needs the Pro plan).
+- Any Node 20+ server (`npm run build && npm start`).
+
+## Cloudflare Workers (Workers Builds from GitHub)
+
+Settings on *Workers & Pages → Create → Import a repository → Set up your application*:
+
+| Field | Value |
+|---|---|
+| Project name | `achieve-global` (must equal `name` in `wrangler.jsonc`) |
+| Build command | `npx opennextjs-cloudflare build` |
+| Deploy command | `npx opennextjs-cloudflare deploy` |
+| Non-production branch deploy command | `npx opennextjs-cloudflare upload` |
+| Path (root directory) | `/` |
+| API token | let Cloudflare create one |
+
+Why not `npm run build` / `npx wrangler deploy`: `npm run build` only runs
+`next build` and does not produce the Worker in `.open-next/`; and
+`wrangler deploy` skips copying the pre-rendered pages into the static-assets
+cache, so every visit would be re-rendered (slower, and uses CPU time that is
+limited on the free plan). `opennextjs-cloudflare build` runs `npm run build`
+itself — keep that script as `next build`.
+
+Production branch: the branch to publish from (currently
+`claude/achieve-global-website` until a `main` branch exists).
+
+Runtime variables (email): *Worker → Settings → Variables and Secrets* — add
+`EMAIL_PROVIDER`, `EMAIL_FROM` as text and `EMAIL_PROVIDER_API_KEY` as a
+**Secret**. `keep_vars: true` in `wrangler.jsonc` stops Git deployments from
+deleting dashboard variables. Use **Resend** on Cloudflare: it works over
+HTTPS; SMTP over TLS from Workers has not been tested.
+
+Build variables: only `NEXT_PUBLIC_GA_MEASUREMENT_ID`, and only if analytics
+is enabled (*Settings → Build → Variables and secrets*), because it is read
+at build time.
+
+Local check of the Cloudflare build: `npm run cf:preview` (needs no account).
+Put local-only variables in `.dev.vars` (git-ignored).
+
+Free-plan notes: Worker bundle ≈1.4 MiB gzipped (limit 3 MiB). Pages are
+served from the pre-rendered cache. Image optimisation is disabled
+(`images.unoptimized`) because Cloudflare's optimizer needs Cloudflare
+Images; logo files are pre-sized and photos must be exported at web size.
+
+Custom domain on Cloudflare: `achieveglobal.com.tr` must use Cloudflare DNS
+(free). When adding the site, Cloudflare imports existing records — compare
+them with your current DNS export **before** changing nameservers, make sure
+every `MX`, SPF/DKIM/DMARC `TXT` and mail-related `CNAME`/`A` record is
+present, and keep mail hostnames (e.g. `mail`, `webmail`, autodiscover) as
+**DNS only** (grey cloud). Then *Worker → Settings → Domains & Routes → Add →
+Custom domain* for `achieveglobal.com.tr` and `www.achieveglobal.com.tr`.
+
+## Vercel
+
+### Deploy (Vercel)
 
 1. Push this repository to GitHub.
 2. In Vercel: *Add New → Project*, import the repository. The framework is
@@ -30,7 +85,7 @@ The reverse proxy must set `X-Real-IP` (and overwrite any client-supplied
 value), otherwise the form rate limit can be bypassed:
 `proxy_set_header X-Real-IP $remote_addr;` in Nginx.
 
-## 2. Connect the domain
+## 2. Connect the domain (Vercel)
 
 In Vercel: *Settings → Domains*, add `achieveglobal.com.tr` and
 `www.achieveglobal.com.tr`. Set `achieveglobal.com.tr` as primary and let

@@ -23,6 +23,10 @@ console.log("emblem", (await meta(emblem)).width, (await meta(emblem)).height);
 // Full logo, trimmed — next/image serves resized AVIF/WebP from this.
 await sharp(full).resize({ width: 900 }).png({ compressionLevel: 9, palette: false }).toFile("public/brand/achieve-global-logo.png");
 await sharp(full).resize({ width: 900 }).webp({ quality: 90 }).toFile("public/brand/achieve-global-logo.webp");
+// Pre-sized logo files for the header/footer <img srcset> (no runtime optimizer).
+for (const w of [120, 180, 240, 320]) {
+  await sharp(full).resize({ width: w }).webp({ quality: 92 }).toFile(`public/brand/achieve-global-logo-${w}.webp`);
+}
 // Emblem only (icons, compact placements).
 await sharp(emblem).resize({ width: 600 }).png({ compressionLevel: 9 }).toFile("public/brand/achieve-global-emblem.png");
 

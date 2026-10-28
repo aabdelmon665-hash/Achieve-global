@@ -20,7 +20,13 @@ function fail(error: ErrorKey, status: number, extra: Record<string, unknown> = 
   return NextResponse.json({ ok: false, error, ...extra }, { status, headers });
 }
 
+/**
+ * Client IP for rate limiting, from the header the hosting platform itself
+ * sets (and overwrites), so visitors cannot spoof it.
+ */
 function clientIp(req: NextRequest) {
+  const onCloudflare = typeof navigator !== "undefined" && navigator.userAgent === "Cloudflare-Workers";
+  if (onCloudflare) return req.headers.get("cf-connecting-ip") ?? "unknown";
   return (
     req.headers.get("x-real-ip") ??
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??

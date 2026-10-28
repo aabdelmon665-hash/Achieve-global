@@ -7,6 +7,7 @@
  *
  * To use a real photo: place it in /public/images (landscape, at least
  * 1600px wide, ideally WebP/JPEG under 400 KB) and set `src` and `alt` below.
+ * Images are served as-is (no runtime optimizer), so export them pre-sized.
  * Alt text is per language.
  */
 export type PhotoSlot = {
