@@ -1,6 +1,6 @@
-import Image from "next/image";
 import { media } from "@/config/media";
 import type { Locale } from "@/i18n/config";
+import { Photo } from "@/components/ui/Photo";
 import { divisionArt } from "./DivisionArt";
 
 /** Shows the configured photograph for a division, or its line illustration. */
@@ -8,7 +8,7 @@ export function DivisionVisual({
   division,
   locale,
   priority = false,
-  sizes = "(min-width: 1024px) 33vw, 100vw",
+  sizes = "(min-width: 768px) 33vw, 100vw",
 }: {
   division: "industrial" | "food" | "business";
   locale: Locale;
@@ -16,8 +16,18 @@ export function DivisionVisual({
   sizes?: string;
 }) {
   const photo = media[division];
-  if (photo.src) {
-    return <Image src={photo.src} alt={photo.alt[locale]} fill sizes={sizes} priority={priority} className="object-cover" />;
+  if (photo) {
+    return (
+      <div className="absolute inset-0" style={photo.background ? { backgroundColor: photo.background } : undefined}>
+        <Photo
+          photo={photo}
+          locale={locale}
+          sizes={sizes}
+          priority={priority}
+          className={photo.fit === "contain" ? "p-3 sm:p-4" : ""}
+        />
+      </div>
+    );
   }
   const Art = divisionArt[division];
   return (

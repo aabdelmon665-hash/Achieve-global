@@ -10,6 +10,8 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { HeroGlobe } from "@/components/art/HeroGlobe";
 import { DivisionCards } from "@/components/sections/DivisionCards";
 import { CtaBand } from "@/components/sections/CtaBand";
+import { Photo } from "@/components/ui/Photo";
+import { media } from "@/config/media";
 
 export async function generateMetadata({ params }: PageProps<"/[locale]">): Promise<Metadata> {
   const locale = await resolveLocale(params);
@@ -164,8 +166,14 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
             </ul>
             <p className="mt-8 text-sm text-ink-muted">{h.markets.note}</p>
           </div>
-          <div className="mx-auto w-full max-w-lg lg:col-span-6">
-            <HeroGlobe tone="light" className="h-auto w-full" />
+          <div className="lg:col-span-6">
+            {media.logistics ? (
+              <div className="relative aspect-[3/2] overflow-hidden rounded-sm border border-line">
+                <Photo photo={media.logistics} locale={locale} sizes="(min-width: 1024px) 45vw, 100vw" />
+              </div>
+            ) : (
+              <HeroGlobe tone="light" className="mx-auto h-auto w-full max-w-lg" />
+            )}
           </div>
         </div>
       </section>

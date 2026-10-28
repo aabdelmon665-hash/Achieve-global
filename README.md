@@ -63,6 +63,15 @@ is used unaltered. `node scripts/build-brand-assets.mjs` regenerates the
 web versions in `public/brand/`, the favicon and app icons in `src/app/`, and
 `public/logo.png`.
 
+## Photography
+
+Originals are in `assets/images/originals/`; `node scripts/build-images.mjs`
+writes resized WebP files to `public/images/`, registered in
+`src/config/media.ts`. The ZINORA Rice Chips package image is the company's
+own product artwork and is only resized, never cropped or altered. The
+industrial, business-services and port images are illustrative visuals, and
+their alt text says so.
+
 ## Documentation
 
 - [Deployment & domain](docs/DEPLOYMENT.md)

@@ -1,26 +1,83 @@
 /**
- * Photography slots.
+ * Photography used on the site.
  *
- * No photographs ship with the site: the company has not yet supplied genuine
- * imagery, and stock photos of fictitious products would misrepresent the
- * business. Until a slot is filled, a purpose-made line illustration is shown.
+ * Originals live in assets/images/originals; `node scripts/build-images.mjs`
+ * writes the resized WebP files referenced here (public/images/<name>-<w>.webp).
+ * Images are served as-is (no runtime optimizer), so every width listed must
+ * exist. Set a slot to `null` to fall back to the line illustration.
  *
- * To use a real photo: place it in /public/images (landscape, at least
- * 1600px wide, ideally WebP/JPEG under 400 KB) and set `src` and `alt` below.
- * Images are served as-is (no runtime optimizer), so export them pre-sized.
- * Alt text is per language.
+ * `illustrative: true` marks generated/stock visuals that do not show
+ * ACHIEVE GLOBAL's own facilities, people or shipments; their alt text says so.
  */
-export type PhotoSlot = {
-  src: string | null;
+export type Photo = {
+  name: string;
+  widths: number[];
+  /** Intrinsic size of the largest file, for layout reservation. */
+  width: number;
+  height: number;
   alt: { en: string; tr: string; ar: string };
+  /** "contain" shows the whole image (products); "cover" fills the frame. */
+  fit: "cover" | "contain";
+  /** Backdrop behind a "contain" image, matched to the photo's own background. */
+  background?: string;
+  illustrative: boolean;
 };
 
-const empty = { en: "", tr: "", ar: "" };
+export const zinora: Photo = {
+  name: "zinora-rice-chips",
+  widths: [480, 800, 1122],
+  width: 1122,
+  height: 1402,
+  fit: "contain",
+  background: "#1A2B1B",
+  illustrative: false,
+  alt: {
+    en: "ZINORA Rice Chips package — triangle-shaped rice chips, Sour Cream & Herbs",
+    tr: "ZINORA Rice Chips ambalajı — üçgen pirinç cipsi, Sour Cream & Herbs",
+    ar: "عبوة رقائق الأرز ZINORA — رقائق أرز مثلثة الشكل بنكهة Sour Cream & Herbs",
+  },
+};
 
-export const media: Record<"hero" | "industrial" | "food" | "business" | "about", PhotoSlot> = {
-  hero: { src: null, alt: empty },
-  industrial: { src: null, alt: empty },
-  food: { src: null, alt: empty },
-  business: { src: null, alt: empty },
-  about: { src: null, alt: empty },
+export const media: Record<"industrial" | "food" | "business" | "logistics", Photo | null> = {
+  industrial: {
+    name: "industrial-sourcing",
+    widths: [480, 764],
+    width: 764,
+    height: 508,
+    fit: "cover",
+    illustrative: true,
+    alt: {
+      en: "Illustrative image: steel coils and processing machinery in an industrial plant",
+      tr: "Temsili görsel: endüstriyel bir tesiste çelik rulolar ve işleme makineleri",
+      ar: "صورة توضيحية: لفائف صلب وآلات معالجة في منشأة صناعية",
+    },
+  },
+  // The food division is represented by the company's own product, ZINORA.
+  food: zinora,
+  business: {
+    name: "business-services-istanbul",
+    widths: [480, 764],
+    width: 764,
+    height: 507,
+    fit: "cover",
+    illustrative: true,
+    alt: {
+      en: "Illustrative image: business meeting in an office overlooking the Bosphorus, Istanbul",
+      tr: "Temsili görsel: İstanbul'da Boğaz manzaralı bir ofiste iş toplantısı",
+      ar: "صورة توضيحية: اجتماع عمل في مكتب يطل على مضيق البوسفور في إسطنبول",
+    },
+  },
+  logistics: {
+    name: "global-logistics-port",
+    widths: [480, 765],
+    width: 765,
+    height: 507,
+    fit: "cover",
+    illustrative: true,
+    alt: {
+      en: "Illustrative image: container ship and cranes at a commercial port",
+      tr: "Temsili görsel: ticari bir limanda konteyner gemisi ve vinçler",
+      ar: "صورة توضيحية: سفينة حاويات ورافعات في ميناء تجاري",
+    },
+  },
 };

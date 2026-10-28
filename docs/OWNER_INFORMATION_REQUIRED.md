@@ -10,6 +10,7 @@ marked `[to be completed]` until supplied. Nothing below has been invented.
 | Official logo | ✅ Integrated (header, footer, favicon, app icons, social image, structured data). Original kept at `assets/brand/achieve-global-logo-original.png`. |
 | Official domain | ✅ `https://achieveglobal.com.tr` — set once in `src/config/site.ts`. |
 | General email | ✅ info@achieveglobal.com.tr (existing mailbox). |
+| Website image pack | ✅ ZINORA Rice Chips package (product image, used unaltered) and three illustrative corporate visuals. Originals in `assets/images/originals/`. |
 | Exports email | ⏳ exports@achieveglobal.com.tr — **to be created**; see `docs/EMAIL_SETUP.md` → Mailboxes. |
 
 ## Required before launch
@@ -43,7 +44,8 @@ marked `[to be completed]` until supplied. Nothing below has been invented.
 
 | Item | Notes |
 |---|---|
-| Genuine photography | Hero, industrial, food, business, about. Set in `src/config/media.ts`; until then line illustrations are shown. |
+| Higher-resolution corporate images | The supplied industrial, business and port visuals are ~765 px wide; ≥1600 px versions would look sharper on high-resolution screens. Re-run `node scripts/build-images.mjs` after replacing them. |
+| ZINORA product details (only if you want them published) | Manufacturer/origin, pack sizes, and verified documentation for the claims printed on the package. The website text currently names the brand and product only. |
 | Product catalogue: real photos, specifications, producer, verified certificates | `src/content/products.ts`; the section appears automatically. |
 | Telephone number | Only if a staffed number exists. Not displayed until provided. |
 | Social media profiles | Only real, active accounts → `social` in `src/config/site.ts`. |

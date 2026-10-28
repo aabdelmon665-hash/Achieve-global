@@ -138,7 +138,9 @@ Indexing takes days to weeks; no ranking is guaranteed.
 - Text: `src/i18n/dictionaries/{en,tr,ar}.ts` (keep all three in sync; run
   `npm run check:i18n`).
 - Company facts, emails, legal identifiers: `src/config/site.ts`.
-- Photos: `src/config/media.ts` + files in `public/images/`.
+- Photos: put originals in `assets/images/originals/`, add them to
+  `scripts/build-images.mjs`, run `node scripts/build-images.mjs`, and register
+  them in `src/config/media.ts` (with alt text in all three languages).
 - Logo: replace `assets/brand/achieve-global-logo-original.png` and run
   `node scripts/build-brand-assets.mjs` to regenerate the header/footer logo,
   favicon, app icons and `public/logo.png`. The social image

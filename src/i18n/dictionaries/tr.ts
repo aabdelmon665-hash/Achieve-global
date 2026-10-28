@@ -265,6 +265,13 @@ const tr: Dictionary = {
       title: "Türkiye'den Gıda Ticareti ve İhracat",
       text: "Paketli gıdalar, atıştırmalıklar, özel marka ürünler ve uluslararası dağıtımla ilgili ticari fırsatları koordine ederiz.",
     },
+    showcase: {
+      eyebrow: "Kendi ürün markamız",
+      title: "ZINORA Rice Chips",
+      text: "ZINORA, kendi atıştırmalık markamızdır. ZINORA Rice Chips (pirinç cipsi) ile ilgilenen ithalatçı, distribütör ve perakendeciler ihracat teklifi isteyebilir. Ürün bilgileri ve belgeler talep üzerine paylaşılır.",
+      cta: "ZINORA için teklif isteyin",
+      caption: "ZINORA Rice Chips — ürün ambalajı",
+    },
     intro: {
       title: "Türk gıda üreticilerini uluslararası alıcılarla buluşturuyoruz",
       text: "Türkiye'den paketli gıda ve atıştırmalık ürün arayan ithalatçı, distribütör ve perakendecilerle çalışır; bir ihracat işlemindeki ticari, ambalaj ve doküman adımlarını koordine ederiz.",

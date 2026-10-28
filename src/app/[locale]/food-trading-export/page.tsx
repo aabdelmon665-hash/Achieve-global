@@ -12,6 +12,7 @@ import { Notice } from "@/components/sections/Notice";
 import { CtaBand } from "@/components/sections/CtaBand";
 import { InquirySection } from "@/components/forms/InquirySection";
 import { ButtonLink } from "@/components/ui/Button";
+import { ZinoraShowcase } from "@/components/sections/ZinoraShowcase";
 
 type Props = PageProps<"/[locale]/food-trading-export">;
 
@@ -34,10 +35,12 @@ export default async function FoodPage({ params }: Props) {
         text={p.hero.text}
         crumbs={crumbsFor(locale, dict, "food", dict.nav.food)}
         crumbLabel={dict.nav.breadcrumb}
-        aside={<DivisionHeroVisual division="food" locale={locale} />}
+        aside={<DivisionHeroVisual division="food" locale={locale} caption={p.showcase.caption} />}
       >
         <ButtonLink href="#inquiry" variant="gold" arrow>{dict.common.goToForm}</ButtonLink>
       </PageHero>
+
+      <ZinoraShowcase locale={locale} dict={dict} />
 
       <section aria-labelledby="intro-title" className="py-20 lg:py-24">
         <div className="container-page grid gap-10 lg:grid-cols-12">

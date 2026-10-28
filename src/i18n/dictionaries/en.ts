@@ -263,6 +263,13 @@ const en = {
       title: "Food Trading & Export from Türkiye",
       text: "We coordinate commercial opportunities involving packaged foods, snacks, private-label products, and international distribution.",
     },
+    showcase: {
+      eyebrow: "Our product brand",
+      title: "ZINORA Rice Chips",
+      text: "ZINORA is our own snack brand. Importers, distributors and retailers interested in ZINORA Rice Chips can request an export quotation. Product details and documentation are shared on request.",
+      cta: "Request a ZINORA quotation",
+      caption: "ZINORA Rice Chips — product package",
+    },
     intro: {
       title: "Connecting Turkish food producers with international buyers",
       text: "We work with importers, distributors and retailers looking for packaged food and snack products from Türkiye, and coordinate the commercial, packaging and documentation steps involved in an export transaction.",
