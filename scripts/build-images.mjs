@@ -4,8 +4,8 @@
 import sharp from "sharp";
 
 const jobs = [
-  // ZINORA package: product artwork, keep every pixel of the composition.
-  { name: "zinora-rice-chips", widths: [480, 800, 1122], quality: 86 },
+  // ZINORA Rice Chips on a packaging line: keep the full composition.
+  { name: "zinora-rice-chips-factory", ext: "png", widths: [640, 1024, 1672], quality: 84 },
   // Illustrative corporate visuals (supplied at ~765 px wide; never upscaled).
   { name: "industrial-sourcing", widths: [480, 764], quality: 82 },
   { name: "business-services-istanbul", widths: [480, 764], quality: 82 },
@@ -13,7 +13,7 @@ const jobs = [
 ];
 
 for (const job of jobs) {
-  const src = `assets/images/originals/${job.name}.jpg`;
+  const src = `assets/images/originals/${job.name}.${job.ext ?? "jpg"}`;
   const { width: original } = await sharp(src).metadata();
   for (const w of job.widths) {
     const width = Math.min(w, original);

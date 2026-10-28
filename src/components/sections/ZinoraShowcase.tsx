@@ -13,8 +13,8 @@ export function ZinoraShowcase({ locale, dict, withImage = false }: { locale: Lo
         <div className={`grid items-center gap-10 border border-line border-s-2 border-s-gold bg-white p-8 sm:p-10 ${withImage ? "lg:grid-cols-12" : ""}`}>
           {withImage && (
             <div className="lg:col-span-5">
-              <div className="relative mx-auto aspect-[4/5] w-full max-w-[340px] overflow-hidden rounded-sm" style={{ backgroundColor: zinora.background }}>
-                <Photo photo={zinora} locale={locale} sizes="(min-width: 1024px) 340px, 80vw" />
+              <div className="relative w-full overflow-hidden rounded-sm" style={{ aspectRatio: `${zinora.width} / ${zinora.height}` }}>
+                <Photo photo={zinora} locale={locale} sizes="(min-width: 1024px) 40vw, 90vw" />
               </div>
             </div>
           )}

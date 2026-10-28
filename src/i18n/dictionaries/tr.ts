@@ -270,7 +270,7 @@ const tr: Dictionary = {
       title: "ZINORA Rice Chips",
       text: "ZINORA, kendi atıştırmalık markamızdır. ZINORA Rice Chips (pirinç cipsi) ile ilgilenen ithalatçı, distribütör ve perakendeciler ihracat teklifi isteyebilir. Ürün bilgileri ve belgeler talep üzerine paylaşılır.",
       cta: "ZINORA için teklif isteyin",
-      caption: "ZINORA Rice Chips — ürün ambalajı",
+      caption: "ZINORA Rice Chips — paketleme hattı",
     },
     intro: {
       title: "Türk gıda üreticilerini uluslararası alıcılarla buluşturuyoruz",

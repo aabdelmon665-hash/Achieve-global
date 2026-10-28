@@ -268,7 +268,7 @@ const en = {
       title: "ZINORA Rice Chips",
       text: "ZINORA is our own snack brand. Importers, distributors and retailers interested in ZINORA Rice Chips can request an export quotation. Product details and documentation are shared on request.",
       cta: "Request a ZINORA quotation",
-      caption: "ZINORA Rice Chips — product package",
+      caption: "ZINORA Rice Chips — packaging line",
     },
     intro: {
       title: "Connecting Turkish food producers with international buyers",

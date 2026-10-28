@@ -20,21 +20,23 @@ export type Photo = {
   fit: "cover" | "contain";
   /** Backdrop behind a "contain" image, matched to the photo's own background. */
   background?: string;
+  /** Large placements use the image's own aspect ratio, so nothing is cropped. */
+  nativeFrame?: boolean;
   illustrative: boolean;
 };
 
 export const zinora: Photo = {
-  name: "zinora-rice-chips",
-  widths: [480, 800, 1122],
-  width: 1122,
-  height: 1402,
-  fit: "contain",
-  background: "#1A2B1B",
+  name: "zinora-rice-chips-factory",
+  widths: [640, 1024, 1672],
+  width: 1672,
+  height: 941,
+  fit: "cover",
+  nativeFrame: true,
   illustrative: false,
   alt: {
-    en: "ZINORA Rice Chips package — triangle-shaped rice chips, Sour Cream & Herbs",
-    tr: "ZINORA Rice Chips ambalajı — üçgen pirinç cipsi, Sour Cream & Herbs",
-    ar: "عبوة رقائق الأرز ZINORA — رقائق أرز مثلثة الشكل بنكهة Sour Cream & Herbs",
+    en: "ZINORA Rice Chips packs on a food packaging line",
+    tr: "Gıda paketleme hattında ZINORA Rice Chips paketleri",
+    ar: "عبوات رقائق الأرز ZINORA على خط تعبئة للأغذية",
   },
 };
 
