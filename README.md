@@ -21,7 +21,7 @@ npm run dev        # http://localhost:3000 → redirects to /en/
 | `npm run dev` | Development server |
 | `npm run build` / `npm start` | Production build / server |
 | `npm run lint` | ESLint |
-| `npm run typecheck` | TypeScript (run `npx next typegen` first on a fresh clone) |
+| `npm run typecheck` | TypeScript (generates route types first) |
 | `npm run check:i18n` | Confirms TR and AR translations match EN |
 
 ## Pages (each under `/en/`, `/tr/`, `/ar/`)

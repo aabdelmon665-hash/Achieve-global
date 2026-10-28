@@ -45,7 +45,7 @@ const en = {
 
   home: {
     hero: {
-      eyebrow: "Istanbul · Türkiye",
+      eyebrow: "ISTANBUL · TÜRKİYE",
       title: "Connecting Businesses. Enabling Global Trade.",
       text: "ACHIEVE GLOBAL supports international businesses through trade coordination, industrial sourcing, food exports, and selected business services in Türkiye.",
       artLabel: "Illustration of trade routes extending from Türkiye",
