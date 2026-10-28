@@ -1,0 +1,19 @@
+import type { Metadata } from "next";
+import { getDictionary } from "@/i18n/get-dictionary";
+import { resolveLocale } from "@/lib/locale-params";
+import { pageMetadata } from "@/lib/seo";
+import { LegalPage } from "@/components/sections/LegalPage";
+
+type Props = PageProps<"/[locale]/terms-of-use">;
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const locale = await resolveLocale(params);
+  const doc = getDictionary(locale).legal.terms;
+  return pageMetadata({ locale, route: "terms", title: doc.metaTitle, description: doc.metaDescription });
+}
+
+export default async function TermsPage({ params }: Props) {
+  const locale = await resolveLocale(params);
+  const dict = getDictionary(locale);
+  return <LegalPage locale={locale} dict={dict} doc={dict.legal.terms} route="terms" />;
+}

@@ -1,0 +1,129 @@
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/manrope";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-400.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-500.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-600.css";
+@import "@fontsource/ibm-plex-sans-arabic/arabic-700.css";
+@import "tailwindcss";
+
+@theme {
+  --color-navy-950: #0c1727;
+  --color-navy-900: #14243a;
+  --color-navy-800: #1c3150;
+  --color-navy-700: #2a4466;
+  --color-navy-100: #e3e8ef;
+  --color-charcoal: #202833;
+  --color-ink-muted: #556070;
+  --color-mist: #f4f6f8;
+  --color-line: #dde2e8;
+  --color-line-dark: #2b3c55;
+  --color-gold: #b69a65;
+  --color-gold-soft: #d8c6a0;
+  --color-gold-ink: #7d6740;
+  --color-success: #1f6b4f;
+  --color-danger: #a1342c;
+
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, "Segoe UI", Arial, sans-serif;
+  --font-display: "Manrope Variable", "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: "IBM Plex Sans Arabic", "Inter Variable", "Segoe UI", Tahoma, sans-serif;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  :root {
+    --header-h: 4.5rem;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    scroll-padding-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    @apply bg-white font-sans text-charcoal antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+
+  :lang(ar) body,
+  :lang(ar) .font-display {
+    font-family: var(--font-arabic);
+    font-feature-settings: normal;
+    letter-spacing: 0;
+  }
+
+  /* Arabic script needs more generous line height. */
+  :lang(ar) p,
+  :lang(ar) li {
+    line-height: 1.9;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display text-navy-900;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--color-navy-100);
+    color: var(--color-navy-900);
+  }
+
+  input[type="date"] {
+    min-height: 3rem;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-xs font-semibold tracking-[0.18em] uppercase text-gold-ink;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply inline-block h-px w-8 bg-gold;
+  }
+  :lang(ar) .eyebrow {
+    letter-spacing: 0;
+    @apply text-sm;
+  }
+  .on-dark .eyebrow {
+    @apply text-gold-soft;
+  }
+
+  .prose-legal h2 {
+    @apply mt-12 mb-4 text-xl font-semibold;
+  }
+  .prose-legal p,
+  .prose-legal li {
+    @apply leading-relaxed text-ink-muted;
+  }
+  .prose-legal p + p {
+    @apply mt-4;
+  }
+  .prose-legal ul {
+    @apply my-4 list-disc space-y-2 ps-6 marker:text-gold;
+  }
+}
